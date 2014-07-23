@@ -6,8 +6,8 @@ import mock
 
 import nap
 from nap.http import NapResponse
-from nap.engine import ResourceEngine, ValidableResourceEngine, NapValidationException
-from nap.exceptions import InvalidStatusError
+from nap.engine import ResourceEngine, ValidableResourceEngine
+from nap.exceptions import InvalidStatusError, NapValidationException
 
 from . import SampleResourceModel
 

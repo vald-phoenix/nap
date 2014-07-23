@@ -2,7 +2,7 @@ import copy
 import json
 
 from .collection import ListWithAttributes
-from .exceptions import InvalidStatusError
+from .exceptions import InvalidStatusError, NapValidationException
 from .http import NapRequest, NapResponse
 from .serializers import JSONSerializer
 from .utils import handle_slash, make_url
@@ -521,10 +521,6 @@ class ResourceEngine(object):
 
         full_url = "%s%s" % (root_url, uri)
         return full_url
-
-
-class NapValidationException(Exception):
-    pass
 
 
 class ValidableResourceEngine(ResourceEngine):
