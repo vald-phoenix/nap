@@ -1,4 +1,5 @@
 import copy
+import json
 
 from .collection import ListWithAttributes
 from .exceptions import InvalidStatusError
@@ -520,3 +521,34 @@ class ResourceEngine(object):
 
         full_url = "%s%s" % (root_url, uri)
         return full_url
+
+
+class NapValidationException(Exception):
+    pass
+
+
+class ValidableResourceEngine(ResourceEngine):
+    """
+    Raises 400s as `NapValidationException` with detailed information about the
+    erroneous fields instead of Nap's default more vague `ValueError`s.
+    """
+    def validate_collection_response(self, response):
+        if response.status_code != 400:
+            return super(ValidableResourceEngine, self).validate_collection_response(response)
+        else:
+            errors = json.loads(response.content)
+            raise NapValidationException(errors)
+
+    def validate_update_response(self, response):
+        if response.status_code != 400:
+            return super(ValidableResourceEngine, self).validate_update_response(response)
+        else:
+            errors = json.loads(response.content)
+            raise NapValidationException(errors)
+
+    def validate_create_response(self, response):
+        if response.status_code != 400:
+            return super(ValidableResourceEngine, self).validate_create_response(response)
+        else:
+            errors = json.loads(response.content)
+            raise NapValidationException(errors)
