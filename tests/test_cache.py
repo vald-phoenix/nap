@@ -120,5 +120,5 @@ class TestDjangoCacheBackend(TestBaseCacheBackend):
             res.url = 'naprulez.org'
             res.headers = {}
 
-            backend.set(res)
+            backend.set(res, res.value)
             assert dj_cache_set.called
