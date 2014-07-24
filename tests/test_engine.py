@@ -448,13 +448,13 @@ class TestResourceEngineWriteMethods(BaseResourceModelTest, unittest.TestCase):
 
     def test_validate_update_response(self):
         engine = self.get_engine()
-        res = mock.Mock(content={'myfield': 'has errors'})
-        res_dict = {'your_field': 'has errors!'}
-        res.content = json.dumps(res_dict)
+        res = mock.Mock()
         res.status_code = 500
         with pytest.raises(InvalidStatusError):
             engine.validate_update_response(res)
 
+        res_dict = {'your_field': 'has errors!'}
+        res.content = json.dumps(res_dict)
         res.status_code = 400
         with pytest.raises(BadRequestError):
             engine.validate_update_response(res)
@@ -466,6 +466,8 @@ class TestResourceEngineWriteMethods(BaseResourceModelTest, unittest.TestCase):
         with pytest.raises(InvalidStatusError):
             engine.validate_create_response(res)
 
+        res_dict = {'your_field': 'has errors!'}
+        res.content = json.dumps(res_dict)
         res.status_code = 400
         with pytest.raises(BadRequestError):
             engine.validate_create_response(res)
