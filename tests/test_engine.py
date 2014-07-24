@@ -7,7 +7,7 @@ import mock
 import nap
 from nap.http import NapResponse
 from nap.engine import ResourceEngine
-from nap.exceptions import InvalidStatusError
+from nap.exceptions import InvalidStatusError, BadRequestError
 
 from . import SampleResourceModel
 
@@ -448,9 +448,15 @@ class TestResourceEngineWriteMethods(BaseResourceModelTest, unittest.TestCase):
 
     def test_validate_update_response(self):
         engine = self.get_engine()
-        res = mock.Mock()
+        res = mock.Mock(content={'myfield': 'has errors'})
+        res_dict = {'your_field': 'has errors!'}
+        res.content = json.dumps(res_dict)
         res.status_code = 500
         with pytest.raises(InvalidStatusError):
+            engine.validate_update_response(res)
+
+        res.status_code = 400
+        with pytest.raises(BadRequestError):
             engine.validate_update_response(res)
 
     def test_validate_create_response(self):
@@ -458,6 +464,10 @@ class TestResourceEngineWriteMethods(BaseResourceModelTest, unittest.TestCase):
         res = mock.Mock()
         res.status_code = 500
         with pytest.raises(InvalidStatusError):
+            engine.validate_create_response(res)
+
+        res.status_code = 400
+        with pytest.raises(BadRequestError):
             engine.validate_create_response(res)
 
     @mock.patch('nap.engine.ResourceEngine.validate_delete_response')

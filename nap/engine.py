@@ -1,7 +1,7 @@
 import copy
 
 from .collection import ListWithAttributes
-from .exceptions import InvalidStatusError
+from .exceptions import InvalidStatusError, BadRequestError
 from .http import NapRequest, NapResponse
 from .serializers import JSONSerializer
 from .utils import handle_slash, make_url
@@ -287,6 +287,10 @@ class ResourceEngine(object):
     def validate_update_response(self, response):
 
         self.validate_response(response)
+
+        if response.status_code in self.model._meta['bad_request_status']:
+            raise BadRequestError(self.model._meta['bad_request_status'], response)
+
         if response.status_code not in self.model._meta['valid_update_status']:
             raise InvalidStatusError(self.model._meta['valid_update_status'], response)
 
@@ -343,6 +347,10 @@ class ResourceEngine(object):
     def validate_create_response(self, response):
 
         self.validate_response(response)
+
+        if response.status_code in self.model._meta['bad_request_status']:
+            raise BadRequestError(self.model._meta['bad_request_status'], response)
+
         if response.status_code not in self.model._meta['valid_create_status']:
             raise InvalidStatusError(self.model._meta['valid_create_status'], response)
 
