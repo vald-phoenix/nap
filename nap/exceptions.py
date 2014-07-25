@@ -19,5 +19,5 @@ class DoesNotExist(Exception):
     pass
 
 
-class BadRequestError(Exception):
+class BadRequestError(InvalidStatusError):
     pass
