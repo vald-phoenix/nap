@@ -20,4 +20,8 @@ class DoesNotExist(Exception):
 
 
 class BadRequestError(InvalidStatusError):
-    pass
+
+    def __init__(self, response, errors):
+        self.response = response
+        self.errors = errors
+        super(InvalidStatusError, self).__init__(errors)

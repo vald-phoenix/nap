@@ -1,4 +1,5 @@
 import copy
+import json
 
 from .collection import ListWithAttributes
 from .exceptions import InvalidStatusError, BadRequestError
@@ -289,7 +290,8 @@ class ResourceEngine(object):
         self.validate_response(response)
 
         if response.status_code in self.model._meta['bad_request_status']:
-            raise BadRequestError(self.model._meta['valid_update_status'], response)
+            errors = json.loads(response.content)
+            raise BadRequestError(response, errors)
 
         if response.status_code not in self.model._meta['valid_update_status']:
             raise InvalidStatusError(self.model._meta['valid_update_status'], response)
@@ -349,7 +351,8 @@ class ResourceEngine(object):
         self.validate_response(response)
 
         if response.status_code in self.model._meta['bad_request_status']:
-            raise BadRequestError(self.model._meta['valid_create_status'], response)
+            errors = json.loads(response.content)
+            raise BadRequestError(response, errors)
 
         if response.status_code not in self.model._meta['valid_create_status']:
             raise InvalidStatusError(self.model._meta['valid_create_status'], response)
