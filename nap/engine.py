@@ -529,5 +529,5 @@ class ResourceEngine(object):
         except KeyError:
             raise ValueError("Nap requests require root_url to be defined")
 
-        full_url = "%s/%s" % (root_url.rstrip('/'), uri.lstrip('/'))
+        full_url = "%s%s" % (root_url, uri)
         return full_url
