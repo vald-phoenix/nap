@@ -23,7 +23,8 @@ class BaseCacheBackend(object):
             return None
 
         cache_header_age = re.search(r'max\-?age=(\d+)', cache_headers)
-        return int(cache_header_age.group(1))
+        if cache_header_age:
+            return int(cache_header_age.group(1))
 
     def get_cache_key(self, model, url):
 
