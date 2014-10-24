@@ -56,7 +56,6 @@ class TestBaseCacheBackend(object):
         assert key == "note::http://foo.com/v1/expected_title/"
 
     def test_get_timeout_from_header(self):
-
         cache_backend = self.get_backend()
         headers = {
             'cache-control': 'public, max-age=2592000'
@@ -65,6 +64,16 @@ class TestBaseCacheBackend(object):
 
         timeout = cache_backend.get_timeout_from_header(mock_response)
         assert timeout == 2592000
+
+    def test_get_timeout_from_header_no_cache(self):
+        cache_backend = self.get_backend()
+        headers = {
+            'cache-control': 'no-cache'
+        }
+        mock_response = self.get_fake_response(headers=headers)
+
+        timeout = cache_backend.get_timeout_from_header(mock_response)
+        assert timeout is None
 
     def test_get_timeout(self):
         cache_backend = self.get_backend()
