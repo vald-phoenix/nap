@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-
+from datetime import datetime
 from setuptools import setup, find_packages
 
-
+version = '%s' % datetime.now().strftime("%Y-%m-%d-%H_%M_%S_%f")
 test_requirements = ['mock', ]
 setup(
     name='nap',
-    version="0.4.3a",
+    version=version,
     description=('api access modeling and tools'),
     author="Jacob Burch",
     author_email="jacobburch@gmail.com",
