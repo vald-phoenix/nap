@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 from .utils import is_string_like
 
@@ -108,6 +109,14 @@ class DateField(Field):
         return datetime.date.strftime(val, dt_format)
 
 
+class DecimalField(Field):
+    def scrub_value(self, val):
+        return Decimal(str(val)) if val else None
+
+    def descrub_value(self, val, for_read=False):
+        return str(val) if val else None
+
+
 class ResourceField(Field):
 
     def __init__(self, resource_model, *args, **kwargs):
@@ -138,7 +147,6 @@ class ResourceField(Field):
 
 
 class ListField(ResourceField):
-
     def scrub_value(self, val):
 
         if not val:
@@ -151,6 +159,30 @@ class ListField(ResourceField):
             return []
         obj_list = [obj.to_python(for_read=for_read) for obj in val]
         return obj_list
+
+
+class SimpleListField(Field):
+    """A list of simple types (e.g. strings, not Resources)"""
+    def scrub_value(self, val):
+        if isinstance(val, list):
+            return val
+        elif isinstance(val, tuple):
+            return list(val)
+        elif val is None:
+            return []
+        else:
+            return [val]
+
+    def descrub_value(self, val, for_read=False):
+        if isinstance(val, list):
+            return val
+        elif isinstance(val, tuple):
+            return list(val)
+        elif val is None:
+            return []
+        else:
+            return [val]
+
 
 
 class DictField(ResourceField):
