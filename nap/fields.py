@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 from .utils import is_string_like
 
