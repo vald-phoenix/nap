@@ -114,7 +114,7 @@ class DecimalField(Field):
         return Decimal(str(val)) if val else None
 
     def descrub_value(self, val, for_read=False):
-        return unicode(val) if val else None
+        return str(val) if val else None
 
 
 class ResourceField(Field):
@@ -166,6 +166,8 @@ class SimpleListField(Field):
     def scrub_value(self, val):
         if isinstance(val, list):
             return val
+        elif isinstance(val, tuple):
+            return list(val)
         elif val is None:
             return []
         else:
@@ -174,6 +176,8 @@ class SimpleListField(Field):
     def descrub_value(self, val, for_read=False):
         if isinstance(val, list):
             return val
+        elif isinstance(val, tuple):
+            return list(val)
         elif val is None:
             return []
         else:

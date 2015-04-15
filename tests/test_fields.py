@@ -1,9 +1,10 @@
 import datetime
 import pytest
+from decimal import Decimal
 
 from . import AuthorModel
 from nap.fields import (Field, ResourceField, ListField,
-        DictField, DateTimeField, DateField)
+        DictField, DateTimeField, DateField, DecimalField, SimpleListField)
 
 
 class TestFields(object):
@@ -204,3 +205,48 @@ class TestFields(object):
 
         with pytest.raises(ValueError):
             field.scrub_value(bad_string)
+
+
+    def test_simple_list_field(self):
+        field = SimpleListField()
+
+        # existing list returns the same list
+        assert [1,2,3,4] == field.scrub_value([1,2,3,4])
+
+        # existing tuple 
+        assert [123] == field.scrub_value(123,)
+
+        # None results in an empty list for ease of use
+        assert [] == field.scrub_value(None)
+
+        # Single values become a single item list
+        assert ['1234'] == field.scrub_value('1234')
+        assert ['0'] == field.scrub_value('0')
+        assert [''], field.scrub_value('')
+
+        # ---- descrub 
+        # existing list returns the same list
+        assert [1,2,3,4] == field.descrub_value([1,2,3,4])
+
+        # existing tuple 
+        assert [123] == field.descrub_value(123,)
+
+        # None results in an empty list for ease of use
+        assert [] == field.descrub_value(None)
+
+        # Single values become a single item list
+        assert ['1234'] == field.descrub_value('1234')
+        assert ['0'] == field.descrub_value('0')
+        assert [''], field.descrub_value('')
+
+
+    def test_decimal_field(self):
+        field = DecimalField()
+
+        assert Decimal('10.0') == field.scrub_value(Decimal('10.0'))
+        assert Decimal('10.0') == field.scrub_value('10.0')
+        assert None == field.scrub_value(None)
+
+        assert '10.0' == field.descrub_value(Decimal('10.0'))
+        assert '10.0' == field.descrub_value('10.0')
+        assert None == field.descrub_value(None)
