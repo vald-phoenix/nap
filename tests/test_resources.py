@@ -46,7 +46,7 @@ class TestResourceModelCreation(object):
 
         different_url = "http://www.differenturl.com/v1/"
         dm = SampleResourceModel(root_url=different_url)
-        assert dm._root_url == different_url
+        assert dm._meta['root_url'] == different_url
 
 
 class TestResourceSave(object):
@@ -196,27 +196,17 @@ class TestRootURLPop(object):
             root_url=some_url,
             content='Blank Content')
 
-        assert dm1._root_url == some_url
         assert dm1._meta['root_url'] == some_url
-        attribute_error = False
-        try:
+        with pytest.raises(AttributeError):
             dm1.root_url
-        except AttributeError:
-            attribute_error = True
-        assert attribute_error
 
         # After the first creation I shouldn't have to set the root url again
         dm2 = SampleResourceModel(
             content='Blank Content')
 
-        assert dm2._root_url == some_url
         assert dm2._meta['root_url'] == some_url
-        attribute_error = False
-        try:
+        with pytest.raises(AttributeError):
             dm2.root_url
-        except AttributeError:
-            attribute_error = True
-        assert attribute_error
 
         # If the root url gets set to something else now it should hold
         different_url = "http://www.differenturl.com/v1/"
@@ -224,11 +214,6 @@ class TestRootURLPop(object):
             root_url=different_url,
             content='Blank Content')
 
-        assert dm3._root_url == different_url
         assert dm3._meta['root_url'] == different_url
-        attribute_error = False
-        try:
+        with pytest.raises(AttributeError):
             dm3.root_url
-        except AttributeError:
-            attribute_error = True
-        assert attribute_error
