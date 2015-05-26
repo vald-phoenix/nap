@@ -139,7 +139,7 @@ class TestReourceEtcMethods(object):
         assert dm != object()
 
     def test_cache_key_method(self):
-        dm = SampleResourceModel(slug='some-slug')
+        dm = SampleResourceModel(root_url="http://foo.com/v1/", slug='some-slug')
 
         assert dm.cache_key == "note::http://foo.com/v1/note/some-slug/"
 
@@ -185,3 +185,21 @@ class TestResourceShortcutMethods(object):
         obj.delete()
         eng_del.assert_called_with(obj)
         assert obj.resource_id is None
+
+
+class TestRootURLPop(object):
+
+    def test_resource_id_get(self):
+        different_url = "http://www.differenturl.com/v1/"
+        dm = SampleResourceModel(
+            root_url=different_url,
+            content='Blank Content')
+
+        assert dm._root_url == different_url
+        assert dm._meta['root_url'] == different_url
+        attribute_error = False
+        try:
+            dm.root_url
+        except AttributeError:
+            attribute_error = True
+        assert attribute_error
