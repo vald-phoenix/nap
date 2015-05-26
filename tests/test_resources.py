@@ -190,16 +190,45 @@ class TestResourceShortcutMethods(object):
 class TestRootURLPop(object):
 
     def test_resource_id_get(self):
+        # Create resource with some url
+        some_url = "http://www.someurl.com/v1/"
+        dm1 = SampleResourceModel(
+            root_url=some_url,
+            content='Blank Content')
+
+        assert dm1._root_url == some_url
+        assert dm1._meta['root_url'] == some_url
+        attribute_error = False
+        try:
+            dm1.root_url
+        except AttributeError:
+            attribute_error = True
+        assert attribute_error
+
+        # After the first creation I shouldn't have to set the root url again
+        dm2 = SampleResourceModel(
+            content='Blank Content')
+
+        assert dm2._root_url == some_url
+        assert dm2._meta['root_url'] == some_url
+        attribute_error = False
+        try:
+            dm2.root_url
+        except AttributeError:
+            attribute_error = True
+        assert attribute_error
+
+        # If the root url gets set to something else now it should hold
         different_url = "http://www.differenturl.com/v1/"
-        dm = SampleResourceModel(
+        dm3 = SampleResourceModel(
             root_url=different_url,
             content='Blank Content')
 
-        assert dm._root_url == different_url
-        assert dm._meta['root_url'] == different_url
+        assert dm3._root_url == different_url
+        assert dm3._meta['root_url'] == different_url
         attribute_error = False
         try:
-            dm.root_url
+            dm3.root_url
         except AttributeError:
             attribute_error = True
         assert attribute_error
