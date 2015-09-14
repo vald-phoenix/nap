@@ -39,7 +39,7 @@ class LookupURL(object):
             return None, None
 
         extra_params = dict([
-            item for item in lookup_vars.items()
+            item for item in list(lookup_vars.items())
             if item[0] not in self.required_vars
         ])
 
@@ -50,7 +50,7 @@ class LookupURL(object):
 
         # etc
     def __unicode__(self):
-        return unicode(self.url_string)
+        return str(self.url_string)
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())

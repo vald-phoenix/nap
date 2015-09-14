@@ -336,7 +336,7 @@ class TestResourceEngineWriteMethods(BaseResourceModelTest, unittest.TestCase):
             content='Blank Content')
 
         url = dm.get_update_url()
-        assert url == u'expected_title/'
+        assert url == 'expected_title/'
         SampleResourceModel._lookup_urls = []
 
     def test_update(self):

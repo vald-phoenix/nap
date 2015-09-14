@@ -112,7 +112,7 @@ class TestFields(object):
         }
         resource_dict = field.scrub_value(author_dict_dict)
 
-        assert len(resource_dict.keys()) == 2
+        assert len(list(resource_dict.keys())) == 2
         assert resource_dict['main'].name == 'Jacob'
         assert resource_dict['main'].email == 'elitist@gmail.com'
 

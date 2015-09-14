@@ -36,7 +36,7 @@ class DataModelMetaClass(type):
             urls=urls,
         )
 
-        for name, attr in attrs.iteritems():
+        for name, attr in attrs.items():
             if isinstance(attr, Field):
                 attr._name = name
                 fields[name] = attr
@@ -52,9 +52,7 @@ class DataModelMetaClass(type):
         return model_cls
 
 
-class ResourceModel(object):
-
-    __metaclass__ = DataModelMetaClass
+class ResourceModel(object, metaclass=DataModelMetaClass):
 
     def __init__(self, *args, **kwargs):
         """Construct a new model instance
@@ -83,11 +81,11 @@ class ResourceModel(object):
         model_fields = self._meta['fields']
         api_name_map = dict([
             (field.api_name or name, name)
-            for (name, field) in model_fields.iteritems()
+            for (name, field) in model_fields.items()
         ])
 
         extra_data = set(field_data.keys()) - set(api_name_map.keys())
-        for api_name, field_name in api_name_map.iteritems():
+        for api_name, field_name in api_name_map.items():
             model_field = model_fields[field_name]
 
             if api_name in field_data:
@@ -143,7 +141,7 @@ class ResourceModel(object):
         """
         obj_dict = dict([
             (field_name, field.descrub_value(getattr(self, field_name), for_read))
-            for field_name, field in self._meta['fields'].iteritems()
+            for field_name, field in self._meta['fields'].items()
             if for_read or field.readonly is False
         ])
 
@@ -189,7 +187,7 @@ class ResourceModel(object):
 
     # etc
     def __unicode__(self):
-        return unicode(self.resource_id)
+        return str(self.resource_id)
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())

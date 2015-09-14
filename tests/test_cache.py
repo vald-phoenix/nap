@@ -23,7 +23,7 @@ class TestBaseCacheBackend(object):
 
         defaults.update(kwargs)
         mock_request = mock.Mock()
-        for attr, val in defaults.iteritems():
+        for attr, val in defaults.items():
             setattr(mock_request, attr, val)
 
         return mock_request
@@ -37,7 +37,7 @@ class TestBaseCacheBackend(object):
 
         defaults.update(kwargs)
         mock_response = mock.Mock()
-        for attr, val in defaults.iteritems():
+        for attr, val in defaults.items():
             setattr(mock_response, attr, val)
 
         return mock_response

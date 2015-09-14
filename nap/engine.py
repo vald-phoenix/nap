@@ -74,7 +74,7 @@ class ResourceEngine(object):
             }
 
             url_match_vars = dict([
-                (k, v) for (k, v) in model_keywords.items()
+                (k, v) for (k, v) in list(model_keywords.items())
                 if k in url.url_vars
             ])
 

@@ -5,7 +5,7 @@ from nap.auth import BaseAuthorization
 def test_config_defaults():
     config = NapConfig()
 
-    for key, value in DEFAULT_CONFIG.iteritems():
+    for key, value in DEFAULT_CONFIG.items():
         assert config[key] == value
 
 

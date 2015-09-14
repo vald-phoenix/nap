@@ -31,7 +31,7 @@ def test_add_slash():
 def test_stringlike():
 
     assert is_string_like('hello') is True
-    assert is_string_like(u'hello') is True
+    assert is_string_like('hello') is True
     assert is_string_like(123) is False
 
 

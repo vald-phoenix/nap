@@ -196,7 +196,7 @@ class DictField(ResourceField):
             return {}
 
         resource_dict = dict([
-            (k, self.coerce(v)) for (k, v) in val.iteritems()
+            (k, self.coerce(v)) for (k, v) in val.items()
         ])
         return resource_dict
 
@@ -207,6 +207,6 @@ class DictField(ResourceField):
         if not val:
             return {}
         resource_dict = dict([
-            (k, v.to_python()) for (k, v) in val.iteritems()
+            (k, v.to_python()) for (k, v) in val.items()
         ])
         return resource_dict

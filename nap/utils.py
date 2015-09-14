@@ -1,5 +1,5 @@
 import itertools
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 
 def handle_slash(url, add_slash=None):
@@ -21,7 +21,7 @@ def handle_slash(url, add_slash=None):
 
 def is_string_like(obj):
     try:
-        return isinstance(obj, basestring)
+        return isinstance(obj, str)
     except NameError:
         return isinstance(obj, str)
 
@@ -42,13 +42,13 @@ def make_url(base_url, params=None, add_slash=None):
 
         flat_params = [
             flatten_params(k, v)
-            for (k, v) in params.iteritems()
+            for (k, v) in params.items()
         ]
 
         # since we can have more than one value for a single key, we use a
         # tuple of two tuples instead of a dictionary
         params_tuple = tuple(itertools.chain(*flat_params))
-        param_string = urllib.urlencode(params_tuple)
+        param_string = urllib.parse.urlencode(params_tuple)
         base_url = "%s?%s" % (base_url, param_string)
 
     return base_url
