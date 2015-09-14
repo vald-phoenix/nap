@@ -18,7 +18,7 @@ setup(
     zip_safe=False,
     tests_require=test_requirements,
     install_requires=[
-        'requests==1.2.3',
+        'requests>=1.2.3',
     ] + test_requirements,
     classifiers=[
         'Environment :: Web Environment',

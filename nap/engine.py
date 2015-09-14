@@ -199,7 +199,8 @@ class ResourceEngine(object):
         """Handle any actions needed after a HTTP Response has ben validated
         for a get (get, refresh, lookup) action
         """
-        resource_data = self.deserialize(response.content)
+        content_str = str(response.content, 'utf-8')
+        resource_data = self.deserialize(content_str)
 
         self._raw_response_content = resource_data
         self.handle_response(response)
@@ -236,7 +237,7 @@ class ResourceEngine(object):
         self.validate_collection_response(response)
 
         serializer = self.get_serializer()
-        r_data = serializer.deserialize(response.content)
+        r_data = serializer.deserialize(str(response.content, 'utf-8'))
         collection_field = self.model._meta.get('collection_field')
         if collection_field and collection_field in r_data:
             obj_list = r_data[collection_field]
@@ -290,7 +291,7 @@ class ResourceEngine(object):
         self.validate_response(response)
 
         if response.status_code in self.model._meta['bad_request_status']:
-            errors = json.loads(response.content)
+            errors = json.loads(str(response.content, 'utf-8'))
             raise BadRequestError(response, errors)
 
         if response.status_code not in self.model._meta['valid_update_status']:
@@ -351,7 +352,7 @@ class ResourceEngine(object):
         self.validate_response(response)
 
         if response.status_code in self.model._meta['bad_request_status']:
-            errors = json.loads(response.content)
+            errors = json.loads(str(response.content, 'utf-8'))
             raise BadRequestError(response, errors)
 
         if response.status_code not in self.model._meta['valid_create_status']:
@@ -445,7 +446,7 @@ class ResourceEngine(object):
         """
         obj = self.model()
         serializer = self.get_serializer()
-        field_data = serializer.deserialize(response.content)
+        field_data = serializer.deserialize(str(response.content, 'utf-8'))
         obj.update_fields(field_data)
         obj._full_url = response.url
 
