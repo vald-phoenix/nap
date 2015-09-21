@@ -22,10 +22,7 @@ def handle_slash(url, add_slash=None):
 
 
 def is_string_like(obj):
-    try:
-        return isinstance(obj, six.string_types)
-    except NameError:
-        return isinstance(obj, six.string_types)
+    return isinstance(obj, six.string_types)
 
 
 def make_url(base_url, params=None, add_slash=None):
