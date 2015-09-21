@@ -5,10 +5,10 @@ from __future__ import unicode_literals
 import re
 import six
 
-try:
-    from __builtin__ import unicode #py2
-except ImportError:
-   from __builtin__ import str as unicode #py3
+
+text_fn = str if six.PY3 else unicode
+def to_unicode(s):
+    return s if isinstance(s, six.text_type) else text_fn(s, 'utf-8')
 
 
 class LookupURL(object):
@@ -57,7 +57,7 @@ class LookupURL(object):
 
         # etc
     def __unicode__(self):
-        return unicode(self.url_string)
+        return to_unicode(self.url_string)
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())

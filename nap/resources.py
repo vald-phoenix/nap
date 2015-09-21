@@ -5,11 +5,10 @@ from .fields import Field
 from .lookup import default_lookup_urls
 import six
 
-try:
-    from __builtin__ import unicode #py2
-except ImportError:
-   from __builtin__ import str as unicode #py3
 
+text_fn = str if six.PY3 else unicode
+def to_unicode(s):
+    return s if isinstance(s, six.text_type) else text_fn(s, 'utf-8')
 
 
 class DataModelMetaClass(type):
@@ -194,7 +193,7 @@ class ResourceModel(object):
 
     # etc
     def __unicode__(self):
-        return unicode(self.resource_id)
+        return to_unicode(self.resource_id)
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())

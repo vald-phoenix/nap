@@ -9,16 +9,10 @@ from .http import NapRequest, NapResponse
 from .serializers import JSONSerializer
 from .utils import handle_slash, make_url
 
-try:
-    from __builtin__ import unicode #py2
-except ImportError:
-    from __builtin__ import str as unicode #py3
 
-def to_unicode(text):
-    try:
-        return unicode(text, 'utf-8')
-    except TypeError:
-        return text
+text_fn = str if six.PY3 else unicode
+def to_unicode(s):
+    return s if isinstance(s, six.text_type) else text_fn(s, 'utf-8')
 
 
 class ResourceEngine(object):
@@ -212,7 +206,7 @@ class ResourceEngine(object):
         """Handle any actions needed after a HTTP Response has ben validated
         for a get (get, refresh, lookup) action
         """
-        content_str = unicode(response.content)
+        content_str = to_unicode(response.content)
         resource_data = self.deserialize(content_str)
 
         self._raw_response_content = resource_data
