@@ -1,4 +1,4 @@
-
+from __future__ import unicode_literals
 
 class ListWithAttributes(list):
     def __init__(self, list_vals, extra_data=None):

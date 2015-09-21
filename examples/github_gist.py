@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import nap
 from nap.auth import FoauthAuthorization
 from nap.lookup import nap_url

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from nap import auth
 from .utils import get_nap_request
 

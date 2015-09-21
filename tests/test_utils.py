@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from nap.utils import make_url, is_string_like, handle_slash
 
 

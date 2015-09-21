@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from nap.conf import NapConfig, DEFAULT_CONFIG
 from nap.auth import BaseAuthorization
 

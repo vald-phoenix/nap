@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 try:
     from django.core.cache import cache
 except ImportError as e:

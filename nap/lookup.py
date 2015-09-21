@@ -1,7 +1,14 @@
 """
 Classes and functions for url resolving
 """
+from __future__ import unicode_literals
 import re
+import six
+
+try:
+    from __builtin__ import unicode #py2
+except ImportError:
+   from __builtin__ import str as unicode #py3
 
 
 class LookupURL(object):
@@ -50,7 +57,7 @@ class LookupURL(object):
 
         # etc
     def __unicode__(self):
-        return str(self.url_string)
+        return unicode(self.url_string)
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())

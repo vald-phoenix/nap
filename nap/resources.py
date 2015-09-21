@@ -1,7 +1,15 @@
+from __future__ import unicode_literals
 from .conf import NapConfig
 from .exceptions import EmptyResponseError
 from .fields import Field
 from .lookup import default_lookup_urls
+import six
+
+try:
+    from __builtin__ import unicode #py2
+except ImportError:
+   from __builtin__ import str as unicode #py3
+
 
 
 class DataModelMetaClass(type):
@@ -51,9 +59,8 @@ class DataModelMetaClass(type):
         setattr(model_cls, 'objects', _meta['engine_class'](model_cls))
         return model_cls
 
-
-class ResourceModel(object, metaclass=DataModelMetaClass):
-
+@six.add_metaclass(DataModelMetaClass)
+class ResourceModel(object):
     def __init__(self, *args, **kwargs):
         """Construct a new model instance
         """
@@ -187,7 +194,7 @@ class ResourceModel(object, metaclass=DataModelMetaClass):
 
     # etc
     def __unicode__(self):
-        return str(self.resource_id)
+        return unicode(self.resource_id)
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())

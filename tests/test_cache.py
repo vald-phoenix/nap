@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import mock
 import pytest
 from . import SampleResourceModel

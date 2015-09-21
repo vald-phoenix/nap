@@ -1,5 +1,7 @@
+from __future__ import unicode_literals
 import itertools
-import urllib.request, urllib.parse, urllib.error
+import six
+from six.moves import urllib
 
 
 def handle_slash(url, add_slash=None):
@@ -21,9 +23,9 @@ def handle_slash(url, add_slash=None):
 
 def is_string_like(obj):
     try:
-        return isinstance(obj, str)
+        return isinstance(obj, six.string_types)
     except NameError:
-        return isinstance(obj, str)
+        return isinstance(obj, six.string_types)
 
 
 def make_url(base_url, params=None, add_slash=None):

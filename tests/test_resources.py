@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import nap
 from nap.exceptions import EmptyResponseError
 

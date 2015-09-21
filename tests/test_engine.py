@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import json
 import unittest
 
@@ -130,10 +131,10 @@ class TestResourceEngineAccessMethods(BaseResourceModelTest):
         engine = self.get_engine()
         with mock.patch('nap.engine.ResourceEngine.get_from_uri') as g:
             engine.get('/some/uri/')
-            g.assert_called_once
+            assert g.called
         with mock.patch('nap.engine.ResourceEngine.lookup') as lookup:
             engine.get(pk=1)
-            lookup.assert_called_once
+            assert lookup.called
 
     def test_lookup(self):
 

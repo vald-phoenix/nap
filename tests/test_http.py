@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import pytest
 
 from nap.http import NapRequest, NapResponse

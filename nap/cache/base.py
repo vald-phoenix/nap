@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import re
 
 DEFAULT_TIMEOUT = 60 * 5

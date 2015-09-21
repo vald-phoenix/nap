@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import unicode_literals
 from datetime import datetime
 from setuptools import setup, find_packages
 
@@ -18,7 +19,7 @@ setup(
     zip_safe=False,
     tests_require=test_requirements,
     install_requires=[
-        'requests>=1.2.3',
+        'requests>=1.2.3', 'six'
     ] + test_requirements,
     classifiers=[
         'Environment :: Web Environment',

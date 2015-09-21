@@ -1,11 +1,24 @@
+from __future__ import unicode_literals
 import copy
 import json
+import six
 
 from .collection import ListWithAttributes
 from .exceptions import InvalidStatusError, BadRequestError
 from .http import NapRequest, NapResponse
 from .serializers import JSONSerializer
 from .utils import handle_slash, make_url
+
+try:
+    from __builtin__ import unicode #py2
+except ImportError:
+    from __builtin__ import str as unicode #py3
+
+def to_unicode(text):
+    try:
+        return unicode(text, 'utf-8')
+    except TypeError:
+        return text
 
 
 class ResourceEngine(object):
@@ -199,7 +212,7 @@ class ResourceEngine(object):
         """Handle any actions needed after a HTTP Response has ben validated
         for a get (get, refresh, lookup) action
         """
-        content_str = str(response.content, 'utf-8')
+        content_str = unicode(response.content)
         resource_data = self.deserialize(content_str)
 
         self._raw_response_content = resource_data
@@ -237,7 +250,7 @@ class ResourceEngine(object):
         self.validate_collection_response(response)
 
         serializer = self.get_serializer()
-        r_data = serializer.deserialize(str(response.content, 'utf-8'))
+        r_data = serializer.deserialize(to_unicode(response.content))
         collection_field = self.model._meta.get('collection_field')
         if collection_field and collection_field in r_data:
             obj_list = r_data[collection_field]
@@ -291,7 +304,7 @@ class ResourceEngine(object):
         self.validate_response(response)
 
         if response.status_code in self.model._meta['bad_request_status']:
-            errors = json.loads(str(response.content, 'utf-8'))
+            errors = json.loads(to_unicode(response.content))
             raise BadRequestError(response, errors)
 
         if response.status_code not in self.model._meta['valid_update_status']:
@@ -352,7 +365,7 @@ class ResourceEngine(object):
         self.validate_response(response)
 
         if response.status_code in self.model._meta['bad_request_status']:
-            errors = json.loads(str(response.content, 'utf-8'))
+            errors = json.loads(to_unicode(response.content))
             raise BadRequestError(response, errors)
 
         if response.status_code not in self.model._meta['valid_create_status']:
@@ -446,7 +459,7 @@ class ResourceEngine(object):
         """
         obj = self.model()
         serializer = self.get_serializer()
-        field_data = serializer.deserialize(str(response.content, 'utf-8'))
+        field_data = serializer.deserialize(to_unicode(response.content))
         obj.update_fields(field_data)
         obj._full_url = response.url
 

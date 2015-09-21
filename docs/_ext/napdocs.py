@@ -1,6 +1,7 @@
 """
 Sphinx plugins for nap documentation.
 """
+from __future__ import unicode_literals
 
 
 def setup(app):
