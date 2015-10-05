@@ -1,18 +1,12 @@
 from __future__ import unicode_literals
 import copy
 import json
-import six
 
 from .collection import ListWithAttributes
 from .exceptions import InvalidStatusError, BadRequestError
 from .http import NapRequest, NapResponse
 from .serializers import JSONSerializer
-from .utils import handle_slash, make_url
-
-
-text_fn = str if six.PY3 else unicode
-def to_unicode(s):
-    return s if isinstance(s, six.text_type) else text_fn(s, 'utf-8')
+from .utils import handle_slash, make_url, to_unicode
 
 
 class ResourceEngine(object):

@@ -3,12 +3,8 @@ from .conf import NapConfig
 from .exceptions import EmptyResponseError
 from .fields import Field
 from .lookup import default_lookup_urls
+from .utils import to_unicode
 import six
-
-
-text_fn = str if six.PY3 else unicode
-def to_unicode(s):
-    return s if isinstance(s, six.text_type) else text_fn(s, 'utf-8')
 
 
 class DataModelMetaClass(type):

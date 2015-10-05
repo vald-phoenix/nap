@@ -51,3 +51,10 @@ def make_url(base_url, params=None, add_slash=None):
         base_url = "%s?%s" % (base_url, param_string)
 
     return base_url
+
+
+__text_fn = str if six.PY3 else unicode
+def to_unicode(s): 
+    if s is None:
+       return None
+    return s if isinstance(s, six.text_type) else __text_fn(s, 'utf-8')

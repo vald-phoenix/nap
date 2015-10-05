@@ -3,12 +3,7 @@ Classes and functions for url resolving
 """
 from __future__ import unicode_literals
 import re
-import six
-
-
-text_fn = str if six.PY3 else unicode
-def to_unicode(s):
-    return s if isinstance(s, six.text_type) else text_fn(s, 'utf-8')
+from .utils import to_unicode
 
 
 class LookupURL(object):
