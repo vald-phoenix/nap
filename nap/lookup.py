@@ -2,6 +2,7 @@
 Classes and functions for url resolving
 """
 from __future__ import unicode_literals
+from __future__ import absolute_import
 import re
 from .utils import to_unicode
 
@@ -41,7 +42,7 @@ class LookupURL(object):
             return None, None
 
         extra_params = dict([
-            item for item in list(lookup_vars.items())
+            item for item in lookup_vars.items()
             if item[0] not in self.required_vars
         ])
 

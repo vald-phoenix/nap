@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from __future__ import absolute_import
 from .conf import NapConfig
 from .exceptions import EmptyResponseError
 from .fields import Field

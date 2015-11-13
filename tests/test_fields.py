@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from __future__ import absolute_import
 import datetime
 import pytest
 from decimal import Decimal
@@ -113,7 +114,7 @@ class TestFields(object):
         }
         resource_dict = field.scrub_value(author_dict_dict)
 
-        assert len(list(resource_dict.keys())) == 2
+        assert len(resource_dict.keys()) == 2
         assert resource_dict['main'].name == 'Jacob'
         assert resource_dict['main'].email == 'elitist@gmail.com'
 

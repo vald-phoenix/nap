@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from .fields import (Field, ResourceField, DictField, ListField, DateTimeField)
 from .lookup import nap_url
 from .resources import ResourceModel
