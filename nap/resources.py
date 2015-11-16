@@ -190,7 +190,8 @@ class ResourceModel(object):
 
     # etc
     def __unicode__(self):
-        return to_unicode(self.resource_id)
+        val = to_unicode(self.resource_id)
+        return val or ''
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())
