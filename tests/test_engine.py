@@ -52,6 +52,18 @@ class TestResourceModelURLMethods(BaseResourceModelTest):
         assert final_uri_with_params == '1/2/?extra_param=3'
         SampleResourceModel._lookup_urls = []
 
+    def test_get_lookup_url_with_list_params(self):
+        engine = self.get_engine()
+        kwargs = {'c': 1, 'b': 2, 'a_list': [5, 4, 3]}
+
+        final_uri_with_params = engine.get_lookup_url(
+            hello='hai',
+            what='wut',
+            **kwargs
+        )
+        assert final_uri_with_params == 'hai/wut/?a_list=5&a_list=4&a_list=3&b=2&c=1'
+        SampleResourceModel._lookup_urls = []
+
     def test_delete_url(self):
 
         engine = self.get_engine()
