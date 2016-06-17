@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from __future__ import absolute_import
 import json
 import unittest
+from collections import OrderedDict
 
 import pytest
 import mock
@@ -53,12 +54,12 @@ class TestResourceModelURLMethods(BaseResourceModelTest):
         SampleResourceModel._lookup_urls = []
 
     @pytest.mark.parametrize('test_kwargs', [
-        {'a_list': [5, 4, 3], 'b': 2, 'c': 1},
-        {'a_list': [5, 4, 3], 'c': 1, 'b': 2},
-        {'b': 2, 'a_list': [5, 4, 3], 'c': 1},
-        {'b': 2, 'c': 1, 'a_list': [5, 4, 3]},
-        {'c': 1, 'a_list': [5, 4, 3], 'b': 2},
-        {'c': 1, 'b': 2, 'a_list': [5, 4, 3]},
+        OrderedDict([('a_list', [5, 4, 3]), ('b', 2), ('c', 1)]),
+        OrderedDict([('a_list', [5, 4, 3]), ('c', 1), ('b', 2)]),
+        OrderedDict([('b', 2), ('a_list', [5, 4, 3]), ('c', 1)]),
+        OrderedDict([('b', 2), ('c', 1), ('a_list', [5, 4, 3])]),
+        OrderedDict([('c', 1), ('a_list', [5, 4, 3]), ('b', 2)]),
+        OrderedDict([('c', 1), ('b', 2), ('a_list', [5, 4, 3])]),
     ])
     def test_get_lookup_url_with_list_params(self, test_kwargs):
         engine = self.get_engine()
