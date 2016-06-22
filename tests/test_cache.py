@@ -57,6 +57,19 @@ class TestBaseCacheBackend(object):
         key = cache_backend.get_cache_key(SampleResourceModel, url)
         assert key == "note::http://foo.com/v1/expected_title/"
 
+    def test_get_cache_key_with_parameters(self):
+        kwargs = {'c': 1, 'b': 2, 'a_list': [5, 4, 3]}
+        obj = SampleResourceModel(
+            title='expected_title',
+            content='Blank Content',
+        )
+        cache_backend = self.get_backend()
+
+        uri = SampleResourceModel.objects.get_lookup_url(resource_obj=obj, **kwargs)
+        url = SampleResourceModel.objects.get_full_url(uri)
+        key = cache_backend.get_cache_key(SampleResourceModel, url)
+        assert key == "note::http://foo.com/v1/expected_title/?a_list=5&a_list=4&a_list=3&b=2&c=1"
+
     def test_get_timeout_from_header(self):
         cache_backend = self.get_backend()
         headers = {

@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from __future__ import absolute_import
 import json
 import unittest
+from collections import OrderedDict
 
 import pytest
 import mock
@@ -50,6 +51,25 @@ class TestResourceModelURLMethods(BaseResourceModelTest):
             extra_param='3'
         )
         assert final_uri_with_params == '1/2/?extra_param=3'
+        SampleResourceModel._lookup_urls = []
+
+    @pytest.mark.parametrize('test_kwargs', [
+        OrderedDict([('a_list', [5, 4, 3]), ('b', 2), ('c', 1)]),
+        OrderedDict([('a_list', [5, 4, 3]), ('c', 1), ('b', 2)]),
+        OrderedDict([('b', 2), ('a_list', [5, 4, 3]), ('c', 1)]),
+        OrderedDict([('b', 2), ('c', 1), ('a_list', [5, 4, 3])]),
+        OrderedDict([('c', 1), ('a_list', [5, 4, 3]), ('b', 2)]),
+        OrderedDict([('c', 1), ('b', 2), ('a_list', [5, 4, 3])]),
+    ])
+    def test_get_lookup_url_with_list_params(self, test_kwargs):
+        engine = self.get_engine()
+
+        final_uri_with_params = engine.get_lookup_url(
+            hello='hai',
+            what='wut',
+            **test_kwargs
+        )
+        assert final_uri_with_params == 'hai/wut/?a_list=5&a_list=4&a_list=3&b=2&c=1'
         SampleResourceModel._lookup_urls = []
 
     def test_delete_url(self):
