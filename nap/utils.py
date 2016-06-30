@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
 import itertools
-from urllib import urlencode
-from urlparse import parse_qsl, urlsplit, urlunsplit
-
+from six.moves.urllib.parse import urlencode
+from six.moves.urllib.parse import parse_qsl, urlsplit, urlunsplit
 import six
 from six.moves import urllib
 
