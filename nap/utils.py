@@ -1,19 +1,7 @@
 from __future__ import unicode_literals
 import itertools
 import six
-from six.moves.urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
-
-
-def normalize_url(url_string):
-    url = urlsplit(url_string)
-    if url.query:
-        query_params = sorted(parse_qsl(url.query, keep_blank_values=True), key=lambda key_value: key_value[0])
-        query_normalized = urlencode(query_params)
-        url = url._replace(query=query_normalized)
-
-    # urlsplit'ing and urlunsplit'ing does some normalization, so apply them even if there is not a query string.
-    # See https://docs.python.org/2/library/urlparse.html#urlparse.urlunsplit for more details.
-    return urlunsplit(url)
+from six.moves.urllib.parse import urlencode
 
 
 def handle_slash(url, add_slash=None):
@@ -44,13 +32,13 @@ def make_url(base_url, params=None, add_slash=None):
 
     if params:
 
+        # If we're given an non-string iterable as a params value,
+        # we want to pass in multiple instances of that param key.
         def safe_encode(value):
             if isinstance(value, six.text_type):
                 return value.encode('utf-8')
             return value
 
-        # If we're given an non-string iterable as a params value,
-        # we want to pass in multiple instances of that param key.
         def flatten_params(k, vs):
             if not hasattr(vs, '__iter__') or is_string_like(vs):
                 return ((k, safe_encode(vs)),)
@@ -63,7 +51,7 @@ def make_url(base_url, params=None, add_slash=None):
 
         # since we can have more than one value for a single key, we use a
         # tuple of two tuples instead of a dictionary
-        params_tuple = tuple(itertools.chain(*flat_params))
+        params_tuple = tuple(sorted(itertools.chain(*flat_params), key=lambda key_value: key_value[0]))
         param_string = urlencode(params_tuple)
         base_url = "%s?%s" % (base_url, param_string)
 
