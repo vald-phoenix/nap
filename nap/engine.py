@@ -7,7 +7,7 @@ from .collection import ListWithAttributes
 from .exceptions import InvalidStatusError, BadRequestError
 from .http import NapRequest, NapResponse
 from .serializers import JSONSerializer
-from .utils import handle_slash, make_url, to_unicode
+from .utils import handle_slash, make_url, normalize_url, to_unicode
 
 
 class ResourceEngine(object):
@@ -92,7 +92,7 @@ class ResourceEngine(object):
                     add_slash=self.model._meta['add_slash']
                 )
 
-                return full_url
+                return normalize_url(full_url)
 
         raise ValueError("No valid url")
 
