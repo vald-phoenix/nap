@@ -32,13 +32,13 @@ def make_url(base_url, params=None, add_slash=None):
 
     if params:
 
-        # If we're given an non-string iterable as a params value,
-        # we want to pass in multiple instances of that param key.
         def safe_encode(value):
             if isinstance(value, six.text_type):
                 return value.encode('utf-8')
             return value
 
+        # If we're given an non-string iterable as a params value,
+        # we want to pass in multiple instances of that param key.
         def flatten_params(k, vs):
             if not hasattr(vs, '__iter__') or is_string_like(vs):
                 return ((k, safe_encode(vs)),)

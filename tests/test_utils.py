@@ -37,6 +37,11 @@ def test_stringlike():
     assert is_string_like(123) is False
 
 
+def test_unicode():
+    url = make_url("http://www.naprulez.org/", params={'x': u'\u0414'})
+    assert url == "http://www.naprulez.org/?x=%D0%94"
+
+
 class TestHandleTest(object):
 
     def test_has_get_params(self):
