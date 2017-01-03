@@ -24,6 +24,10 @@ def handle_slash(url, add_slash=None):
 def is_string_like(obj):
     return isinstance(obj, six.string_types)
 
+def safe_encode(value):
+    if isinstance(value, six.text_type):
+        return value.encode('utf-8')
+    return value
 
 def make_url(base_url, params=None, add_slash=None):
     "Split off in case we need to handle more scrubing"
@@ -31,12 +35,6 @@ def make_url(base_url, params=None, add_slash=None):
     base_url = handle_slash(base_url, add_slash)
 
     if params:
-
-        def safe_encode(value):
-            if isinstance(value, six.text_type):
-                return value.encode('utf-8')
-            return value
-
         # If we're given an non-string iterable as a params value,
         # we want to pass in multiple instances of that param key.
         def flatten_params(k, vs):
