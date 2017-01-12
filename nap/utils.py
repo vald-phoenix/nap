@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import itertools
+from operator import itemgetter
 import six
 from six.moves.urllib.parse import urlencode
 
@@ -24,10 +25,12 @@ def handle_slash(url, add_slash=None):
 def is_string_like(obj):
     return isinstance(obj, six.string_types)
 
+
 def safe_encode(value):
     if isinstance(value, six.text_type):
         return value.encode('utf-8')
     return value
+
 
 def make_url(base_url, params=None, add_slash=None):
     "Split off in case we need to handle more scrubing"
@@ -49,7 +52,7 @@ def make_url(base_url, params=None, add_slash=None):
 
         # since we can have more than one value for a single key, we use a
         # tuple of two tuples instead of a dictionary
-        params_tuple = tuple(sorted(itertools.chain(*flat_params), key=lambda key_value: key_value[0]))
+        params_tuple = tuple(sorted(itertools.chain(*flat_params), key=itemgetter(0)))
         param_string = urlencode(params_tuple)
         base_url = "%s?%s" % (base_url, param_string)
 
