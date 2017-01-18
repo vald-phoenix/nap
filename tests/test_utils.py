@@ -1,27 +1,22 @@
 from __future__ import unicode_literals
 
-from nap.utils import make_url, is_string_like, handle_slash, normalize_url
+from nap.utils import make_url, is_string_like, handle_slash
 
+def test_url_is_normalized():
+    base_url = "https://example.com/path/"
+    params = {'two': [3, 2], 'one': 1}
+    expected_normalized_url = "https://example.com/path/?one=1&two=3&two=2"
 
-class TestNormalizeUrl(object):
-    def test_normalize_url(self):
-        url = "https://example.com/path/?two=3&one=1&two=2"
-        expected_normalized_url = "https://example.com/path/?one=1&two=3&two=2"
+    actual_normalized_url = make_url(base_url, params)
+    assert actual_normalized_url == expected_normalized_url
 
-        actual_normalized_url = normalize_url(url)
-        assert actual_normalized_url == expected_normalized_url
+def test_partial_url_is_normalized():
+    base_url = "https://foo.bar.example.com"
+    params = {}
+    expected_normalized_url = "https://foo.bar.example.com"
 
-    def test_normalize_partial_url(self):
-        url = (
-            "https://foo.bar.example.com"
-        )
-        expected_normalized_url = (
-            "https://foo.bar.example.com"
-        )
-
-        actual_normalized_url = normalize_url(url)
-        assert actual_normalized_url == expected_normalized_url
-
+    actual_normalized_url = make_url(base_url, params)
+    assert actual_normalized_url == expected_normalized_url
 
 def test_url():
     url = make_url("http://www.naprulez.org/", params={'x': '1'})
@@ -55,6 +50,11 @@ def test_stringlike():
     assert is_string_like('hello') is True
     assert is_string_like('hello') is True
     assert is_string_like(123) is False
+
+
+def test_unicode():
+    url = make_url("http://www.naprulez.org/", params={'x': u'\u0414'})
+    assert url == "http://www.naprulez.org/?x=%D0%94"
 
 
 class TestHandleTest(object):
