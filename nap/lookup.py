@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from __future__ import absolute_import
 import re
 from .utils import to_unicode
+import six
 
 
 class LookupURL(object):
@@ -56,7 +57,9 @@ class LookupURL(object):
         return to_unicode(self.url_string)
 
     def __repr__(self):
-        return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())
+        val = "<%s: %s>" % (self.__class__.__name__, self.__unicode__())
+        # For py2 repr needs to return a non-unicode string and in py3 it's the opposite
+        return val.encode('utf8') if six.PY2 else val
 
 
 def nap_url(*args, **kwargs):

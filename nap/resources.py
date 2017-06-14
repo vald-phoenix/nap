@@ -194,4 +194,7 @@ class ResourceModel(object):
         return val or ''
 
     def __repr__(self):
-        return "<%s: %s>" % (self.__class__.__name__, self.__unicode__())
+        val = "<%s: %s>" % (self.__class__.__name__, self.__unicode__())
+        # For py2 repr needs to return a non-unicode string and in py3 it's the opposite
+        return val.encode('utf8') if six.PY2 else val
+
