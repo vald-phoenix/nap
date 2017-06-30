@@ -215,7 +215,7 @@ class TestFields(object):
         # existing list returns the same list
         assert [1,2,3,4] == field.scrub_value([1,2,3,4])
 
-        # existing tuple 
+        # existing tuple
         assert [123] == field.scrub_value(123,)
 
         # None results in an empty list for ease of use
@@ -226,11 +226,11 @@ class TestFields(object):
         assert ['0'] == field.scrub_value('0')
         assert [''], field.scrub_value('')
 
-        # ---- descrub 
+        # ---- descrub
         # existing list returns the same list
         assert [1,2,3,4] == field.descrub_value([1,2,3,4])
 
-        # existing tuple 
+        # existing tuple
         assert [123] == field.descrub_value(123,)
 
         # None results in an empty list for ease of use
@@ -241,14 +241,34 @@ class TestFields(object):
         assert ['0'] == field.descrub_value('0')
         assert [''], field.descrub_value('')
 
-
     def test_decimal_field(self):
+        # Given a decimal field
         field = DecimalField()
 
+        # When de-serialized values are provided
+        # Then it converts them to Decimals
         assert Decimal('10.0') == field.scrub_value(Decimal('10.0'))
         assert Decimal('10.0') == field.scrub_value('10.0')
-        assert None == field.scrub_value(None)
+        assert Decimal('10.0') == field.scrub_value(float('10.0'))
+        assert Decimal('0') == field.scrub_value(Decimal('0.0'))
+        assert Decimal('0') == field.scrub_value('0.0')
+        assert Decimal('0') == field.scrub_value(float('0.0'))
 
+        # When empty de-serialized values are provided
+        # Then it converts them to None
+        assert field.scrub_value(None) is None
+        assert field.scrub_value('') is None
+
+        # When serialized values are provided
+        # Then it converts them to strings
         assert '10.0' == field.descrub_value(Decimal('10.0'))
         assert '10.0' == field.descrub_value('10.0')
-        assert None == field.descrub_value(None)
+        assert '10.0' == field.descrub_value(float('10.0'))
+        assert '0.0' == field.descrub_value(Decimal('0.0'))
+        assert '0.0' == field.descrub_value('0.0')
+        assert '0.0' == field.descrub_value(float('0.0'))
+
+        # When empty serialized values are provided
+        # Then it converts them to None
+        assert field.descrub_value(None) is None
+        assert field.descrub_value('') is None

@@ -5,6 +5,7 @@
 htmlcov
 _build
 __pycache__
+.cache
 scratch.py
 secret.py
 build
