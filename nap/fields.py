@@ -116,7 +116,8 @@ class DecimalField(Field):
         """Return a Decimal object using the provided value.
 
         If the provided value is None or empty return None instead
-        of returning a Decimal.
+        of returning a Decimal.  Otherwise convert the provided value
+        to a string before constructing the Decimal.
         """
         if val is None:
             return None
