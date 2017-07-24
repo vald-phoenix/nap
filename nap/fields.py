@@ -113,10 +113,31 @@ class DateField(Field):
 
 class DecimalField(Field):
     def scrub_value(self, val):
-        return Decimal(str(val)) if val else None
+        """Return a Decimal object using the provided value.
+
+        If the provided value is None or empty return None instead
+        of returning a Decimal.  Otherwise convert the provided value
+        to a string before constructing the Decimal.
+        """
+        if val is None:
+            return None
+
+        val = str(val)
+
+        return Decimal(val) if val else None
 
     def descrub_value(self, val, for_read=False):
-        return str(val) if val else None
+        """Return a string representation of the provided value
+
+        If the provided value is None or empty return None instead
+        of returning a string.
+        """
+        if val is None:
+            return None
+
+        val = str(val)
+
+        return val or None
 
 
 class ResourceField(Field):
