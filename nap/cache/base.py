@@ -41,8 +41,10 @@ class BaseCacheBackend(object):
         resource_name = model._meta['resource_name']
         cache_key = "{0}::".format(resource_name)
 
-        if (len(cache_key) + len(url)) > self.cache_max_key_size:
+        if self.cache_max_key_size is not None and (len(cache_key) + len(url)) > self.cache_max_key_size:
             cache_key += md5(url.encode('utf-8')).hexdigest()
+            logger = model._meta['logger']
+            logger.info("Cache key for url {0} exceeds length so hashing to key {1}".format(url, cache_key))
         else:
             cache_key += url
 
