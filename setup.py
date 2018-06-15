@@ -11,7 +11,7 @@ setup(
     author="Jacob Burch",
     author_email="jacobburch@gmail.com",
     url='https://github.com/jacobb/nap',
-    long_description=open('README.rst').read(),
+    long_description=open('README.rst', encoding='utf').read(),
     packages=find_packages(),
     zip_safe=False,
     setup_requires=['pytest-runner>=2.0,<3dev'],
