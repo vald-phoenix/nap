@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from datetime import datetime
 from setuptools import setup, find_packages
+import io
 
 version = '%s' % datetime.now().strftime("%Y-%m-%d-%H_%M_%S_%f")
 setup(
@@ -11,7 +12,7 @@ setup(
     author="Jacob Burch",
     author_email="jacobburch@gmail.com",
     url='https://github.com/jacobb/nap',
-    long_description=open('README.rst', encoding='utf-8').read(),
+    long_description=io.open('README.rst', encoding='utf-8').read(),
     packages=find_packages(),
     zip_safe=False,
     setup_requires=['pytest-runner>=2.0,<3dev'],
