@@ -471,7 +471,7 @@ class ResourceEngine(object):
             self.logger.debug("Got cached response for %s" % cache_key)
 
             if not isinstance(cached_response, NapResponse):
-                self.logger.error("Expected to get a nap object from cache, but got %s instead: %s",
+                self.logger.error("Expected to get a NapResponse from cache, but got %s instead: %s",
                     type(cached_response), cached_response)
 
                 # We've got some sort of garbage back from memcache. Let's not use it. 
