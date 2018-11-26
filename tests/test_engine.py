@@ -343,6 +343,24 @@ class TestCacheFunctions(object):
 
         assert not cache_set.called
 
+    @mock.patch('requests.request')
+    @mock.patch('nap.cache.base.BaseCacheBackend.get')
+    def test_invalid_cache_result_found(self, mock_get, mock_request):
+
+        cached_response = 'Invalid cache value - should be a nap response'
+        mock_get.return_value = cached_response
+
+        response = NapResponse(
+            content=json.dumps({'id': 1, 'title': 'hello!'}),
+            url='some-url/',
+            status_code=200,
+            request_method='POST',
+        )
+        mock_request.return_value = response
+
+        res = SampleResourceModel.objects.get_from_uri('some-url/')
+        assert mock_request.called
+
 
 class TestResourceEngineWriteMethods(BaseResourceModelTest, unittest.TestCase):
 
