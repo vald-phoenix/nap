@@ -470,11 +470,18 @@ class ResourceEngine(object):
         if cached_response:
             self.logger.debug("Got cached response for %s" % cache_key)
 
-            # Cached responses should not get re-cached to allow for
-            # expected timeouts. Now that we've retrieved the cached
-            # response, behave as if cache is turned off.
-            cached_response.use_cache = False
-            return cached_response
+            if not isinstance(cached_response, NapResponse):
+                self.logger.error("Expected to get a NapResponse from cache, but got %s instead: %s",
+                    type(cached_response), cached_response)
+
+                # We've got some sort of garbage back from memcache. Let's not use it. 
+                return None
+            else:
+                # Cached responses should not get re-cached to allow for
+                # expected timeouts. Now that we've retrieved the cached
+                # response, behave as if cache is turned off.
+                cached_response.use_cache = False
+                return cached_response
 
     def cache_response(self, response):
         if response.request_method not in self.model._meta['cached_methods']\
@@ -534,3 +541,4 @@ class ResourceEngine(object):
 
         full_url = "%s/%s" % (root_url.rstrip('/'), uri.lstrip('/'))
         return full_url
+
