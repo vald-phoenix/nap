@@ -21,7 +21,7 @@ class ResourceEngine(object):
 
         full_url = self.get_full_url(url)
 
-        self.logger.info("Trying to hit %s" % full_url)
+        self.logger.info("Calling %s url: %s" % (request_method, full_url))
 
         request_args = self.get_request_args(kwargs)
 
