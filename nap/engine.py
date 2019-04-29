@@ -231,7 +231,7 @@ class ResourceEngine(object):
         Accesses the first URL set as a collections URL with no additional
         parameters passed. Returns a list of current ResourceModel objects
 
-        :param skip_cache: If true don't cache results (defaults to true for backwards compatibilty)
+        :param skip_cache: If true don't cache results (defaults to true for backwards compatibilty) and don't check cache for an existing value for this request
         :param lookup_vars: variables to pass to _generate_url
         """
         url = self.get_collection_url(**lookup_vars)
