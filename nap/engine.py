@@ -163,6 +163,7 @@ class ResourceEngine(object):
         """
 
         uri = self.get_lookup_url(**lookup_vars)
+
         return self.get_from_uri(uri, skip_cache=skip_cache)
 
     def get_from_uri(self, url, skip_cache=False, *args, **kwargs):
@@ -226,15 +227,25 @@ class ResourceEngine(object):
         """
         return self.filter()
 
-    def filter(self, **lookup_vars):
+    def filter(self, skip_cache=True, **lookup_vars):
         """
         Accesses the first URL set as a collections URL with no additional
         parameters passed. Returns a list of current ResourceModel objects
 
+        :param skip_cache: If true don't cache results (defaults to true for backwards compatibilty)
         :param lookup_vars: variables to pass to _generate_url
         """
         url = self.get_collection_url(**lookup_vars)
-        response = self._request('GET', url)
+
+        if skip_cache:
+            cached_response = None
+        else:
+            cached_response = self.get_from_cache('GET', url)
+
+        if cached_response:
+            response = cached_response
+        else:    
+            response = self._request('GET', url)
 
         self.validate_collection_response(response)
 
@@ -258,6 +269,10 @@ class ResourceEngine(object):
                 raise ValueError('expected list of dictionaries')
 
         resource_list = [self.model(**obj_dict) for obj_dict in obj_list]
+
+        if not skip_cache:
+            self.handle_response(response)
+
         return ListWithAttributes(resource_list, extra_data)
 
     def validate_collection_response(self, response):
