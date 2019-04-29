@@ -163,7 +163,6 @@ class ResourceEngine(object):
         """
 
         uri = self.get_lookup_url(**lookup_vars)
-
         return self.get_from_uri(uri, skip_cache=skip_cache)
 
     def get_from_uri(self, url, skip_cache=False, *args, **kwargs):
@@ -271,7 +270,7 @@ class ResourceEngine(object):
         resource_list = [self.model(**obj_dict) for obj_dict in obj_list]
 
         if not skip_cache:
-            self.handle_response(response)
+            self.cache_response(response)
 
         return ListWithAttributes(resource_list, extra_data)
 
