@@ -57,6 +57,7 @@ class ResourceEngine(object):
             url for url in self.model._meta['urls']
             if getattr(url, url_type, False)
         ]
+
         for url in valid_urls:
             field_values = dict([
                 (var, getattr(resource_obj, var))

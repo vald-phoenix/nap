@@ -2,10 +2,10 @@ from __future__ import unicode_literals
 from __future__ import absolute_import
 import mock
 import pytest
-
+import json
 from flask import Flask
 
-from . import SampleResourceModel
+from . import SampleResourceModel, SampleCacheableResource
 from nap.cache import django_cache, flask_cache
 from nap.cache.base import BaseCacheBackend, DEFAULT_TIMEOUT, MAX_CACHE_KEY_LENGTH
 
@@ -200,3 +200,71 @@ class TestFlaskCacheBackend(TestBaseCacheBackend):
         with mock.patch('flask_caching.Cache.set') as fl_cache_set:
             backend.set(res, res.value)
             assert fl_cache_set.called
+
+
+class TestCaching(object):
+    def setUp(self):
+        self.the_cache = SampleCacheableResource._meta['cache_backend']
+        # NOTE: there is a single instance of the in memory (fake) cache for all instances of our model
+        self.the_cache.clear()
+
+    @mock.patch('requests.request')
+    def test_get_response_from_filter_is_cached(self, mock_request):
+        """Test that filter() responses can be cached.
+        NOTE: nap only supports GETs on filter() calls. Weird"""
+        self.setUp()
+
+        # create mock request nap is going to issue and a mock response that nap will get back
+        r = mock.Mock()
+        r.status_code = 200
+        r.content = json.dumps([
+            {'title': 'hello1', 'content': 'content1'},
+            {'title': 'hello2', 'content': 'content2'}
+        ])
+        mock_request.return_value = r
+
+        # Make a request with caching DISABLED and verify nothing was cached
+        obj = SampleCacheableResource.objects.filter(skip_cache=True)
+        assert len(obj) == 2
+        assert len(self.the_cache.get_cached_data()) == 0
+
+        # Repeat this time with caching ENABLED and verify the request / response was cached
+        obj = SampleCacheableResource.objects.filter(skip_cache=False)
+        assert len(obj) == 2
+        assert len(self.the_cache.get_cached_data()) == 1
+
+        # Repeat a final time, this time we should get the object from cache w/o making another network request
+        mock_request.return_value = None
+        mock_request.side_effect = Exception("We're making a network request when we should be using the cached data")
+        obj = SampleCacheableResource.objects.filter(skip_cache=False)
+
+    @mock.patch('requests.request')
+    def test_get_response_from_lookup_is_cached(self, mock_request):
+        """Test that lookup() responses can be cached."""
+        self.setUp()
+
+        # create mock request nap is going to issue and a mock response that nap will get back
+        r = mock.Mock()
+        r.status_code = 200
+        r.content = json.dumps({'title': 'hello1', 'content': 'content1'})
+        mock_request.return_value = r
+
+        # Make a request with caching DISABLED and verify nothing was cached
+        obj = SampleCacheableResource.objects.lookup(skip_cache=True)
+        assert obj is not None
+
+        # NOTE: unlike filter() lookup() always puts the result in the cache. filter() only stores values in the cache
+        # if skip_cache is False
+        assert len(self.the_cache.get_cached_data()) == 1
+
+        # Repeat this time with caching ENABLED and verify the request / response was cached
+        obj = SampleCacheableResource.objects.lookup(skip_cache=False)
+        assert obj is not None
+        assert len(self.the_cache.get_cached_data()) == 1
+
+        # Repeat a final time, this time we should get the object from cache w/o making another network request
+        mock_request.return_value = None
+        mock_request.side_effect = Exception("We're making a network request when we should be using the cached data")
+        obj = SampleCacheableResource.objects.lookup(skip_cache=False)
+        assert obj is not None
+        assert len(self.the_cache.get_cached_data()) == 1
