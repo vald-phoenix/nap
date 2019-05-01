@@ -4,6 +4,7 @@ import mock
 import pytest
 import json
 from flask import Flask
+import unittest
 
 from . import SampleResourceModel, SampleCacheableResource
 from nap.cache import django_cache, flask_cache
@@ -202,7 +203,7 @@ class TestFlaskCacheBackend(TestBaseCacheBackend):
             assert fl_cache_set.called
 
 
-class TestCaching(object):
+class TestCaching(unittest.TestCase):
     def setUp(self):
         self.the_cache = SampleCacheableResource._meta['cache_backend']
         # NOTE: there is a single instance of the in memory (fake) cache for all instances of our model
@@ -212,7 +213,6 @@ class TestCaching(object):
     def test_get_response_from_filter_is_cached(self, mock_request):
         """Test that filter() responses can be cached.
         NOTE: nap only supports GETs on filter() calls. Weird"""
-        self.setUp()
 
         # create mock request nap is going to issue and a mock response that nap will get back
         r = mock.Mock()
@@ -241,7 +241,6 @@ class TestCaching(object):
     @mock.patch('requests.request')
     def test_get_response_from_lookup_is_cached(self, mock_request):
         """Test that lookup() responses can be cached."""
-        self.setUp()
 
         # create mock request nap is going to issue and a mock response that nap will get back
         r = mock.Mock()
