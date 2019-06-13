@@ -1,7 +1,7 @@
 try:
     import flask_caching
 except ImportError as e:
-    raise ImportError('Error loading Flask-Caching: %s'.format(e))
+    raise ImportError('Error loading Flask-Caching: {}'.format(e))
 
 
 from nap.cache.base import BaseCacheBackend
